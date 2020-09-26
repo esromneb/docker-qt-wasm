@@ -19,3 +19,6 @@ git submodule update --init qtactiveqt qtcanvas3d qtcharts qtdatavis3d qtdeclara
 RUN cd ~/qt5 && ./configure QMAKE_CXXFLAGS=-fPIC -no-optimized-qmake -no-optimize-debug --disable-shared -xplatform wasm-emscripten -nomake examples -skip qtconnectivity -skip qtlocation -skip qtmultimedia -skip qtsensors -skip qttools -skip qtwebsockets -skip qtwinextras -skip qtwebchannel -skip qtwebengine -skip qtspeech -skip qtsensors -skip qtserialbus -skip qtserialport  -nomake examples -nomake tests -opensource -confirm-license   -prefix $PWD/qtbase
 
 RUN cd ~/qt5 && make -j4
+
+ENV PATH "$PATH:/home/emscripten/qt5/qtbase/bin/"
+
