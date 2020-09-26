@@ -10,10 +10,14 @@ MAINTAINER esromneb
 
 ENV DEBIAN_FRONTEND noninteractive
 
-RUN cd /root && git clone https://code.qt.io/qt/qt5.git && \
+USER emscripten
+
+RUN cd ~ && git clone https://code.qt.io/qt/qt5.git && \
 cd qt5 && git checkout 4c82f61c && \
 git submodule update --init qtactiveqt qtcanvas3d qtcharts qtdatavis3d qtdeclarative qtdocgallery qtfeedback qtgamepad qtgraphicaleffects qtimageformats qtlottie qtmacextras qtnetworkauth qtpim qtpurchasing qtquick3d qtquickcontrols qtquickcontrols2 qtquicktimeline qtremoteobjects qtscript qtscxml qtsvg qtsystems qtvirtualkeyboard qtwebview qtxmlpatterns qtbase
 
-RUN cd /root/qt5 && ./configure -no-optimized-qmake -no-optimize-debug -xplatform wasm-emscripten -nomake examples -skip qtconnectivity -skip qtlocation -skip qtmultimedia -skip qtsensors -skip qttools -skip qtwebsockets -skip qtwinextras -skip qtwebchannel -skip qtwebengine -skip qtspeech -skip qtsensors -skip qtserialbus -skip qtserialport  -nomake examples -nomake tests -opensource -confirm-license   -prefix $PWD/qtbase
+RUN cd ~/qt5 && ./configure -no-optimized-qmake -no-optimize-debug --disable-shared -reduce-relocations -xplatform wasm-emscripten -nomake examples -skip qtconnectivity -skip qtlocation -skip qtmultimedia -skip qtsensors -skip qttools -skip qtwebsockets -skip qtwinextras -skip qtwebchannel -skip qtwebengine -skip qtspeech -skip qtsensors -skip qtserialbus -skip qtserialport  -nomake examples -nomake tests -opensource -confirm-license   -prefix $PWD/qtbase; true
 
-RUN cd /root/qt5 && make -j4
+RUN cd ~/qt5 && cat config.log; true
+
+RUN cd ~/qt5 && make -j4
