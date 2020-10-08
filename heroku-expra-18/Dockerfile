@@ -20,7 +20,7 @@ RUN useradd -ms /bin/bash myuser
 USER myuser
 
 
-RUN cd /home/myuser && git clone https://github.com/BehaviorTree/Groot.git && cd Groot && git submodule update --init
+RUN cd /home/myuser && git clone https://github.com/esromneb/Groot.git && cd Groot && git checkout 6874061 && git submodule update --init
 RUN cd /home/myuser/Groot && mkdir build && cd build && cmake .. && make -j4
 
 USER root
@@ -36,7 +36,7 @@ RUN cd /run && ln -v -s /tmp xpra
 RUN ls -l /run
 
 #RUN cd /run/user && n=1; max=65536; while [ "$n" -le "$max" ]; do mkdir "$n"; n=`expr "$n" + 1`; done
-RUN cd /run/user && n=1; max=65536; while [ "$n" -le "$max" ]; do ln -v -s /tmp "$n"; n=`expr "$n" + 1`; done
+#RUN cd /run/user && n=1; max=65536; while [ "$n" -le "$max" ]; do ln -v -s /tmp "$n"; n=`expr "$n" + 1`; done
 
 RUN cd /run/user && ls -l
 
