@@ -22,5 +22,13 @@ RUN apt-get install -y xpra
 
 RUN apt-get install -y nano cmake qt5-default libqt5svg5-dev x11-apps git
 
-RUN cd /root && git clone https://github.com/BehaviorTree/Groot.git && cd Groot && git submodule update --init && mkdir build && cd build && cmake .. && make -j4
+#RUN cd /root && git clone https://github.com/BehaviorTree/Groot.git && cd Groot && git submodule update --init && mkdir build && cd build && cmake .. && make -j4
 
+
+RUN useradd -ms /bin/bash myuser
+USER myuser
+
+
+RUN cd /home/myuser && git clone https://github.com/BehaviorTree/Groot.git && cd Groot && git submodule update --init
+RUN cd /home/myuser/Groot && mkdir build && cd build && cmake .. && make -j4
+CMD XDG_RUNTIME_DIR=/tmp xpra start --no-daemon --bind-tcp=0.0.0.0:$PORT --speed=100 --file-transfer=yes --start=/home/myuser/Groot/build/Groot
