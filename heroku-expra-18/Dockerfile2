@@ -1,0 +1,59 @@
+# FROM ubuntu:bionic-20200921
+
+#Grab the latest alpine image
+FROM alpine:latest
+
+MAINTAINER esromneb
+
+
+# build:
+#
+# docker build -t esromneb/qt-wasm/1.39.11:base base
+
+
+ENV DEBIAN_FRONTEND noninteractive
+
+RUN apk update
+
+RUN apk add dpkg wget g++ cmake
+
+RUN apk search svn
+
+RUN apk add subversion
+
+RUN cd /root && svn co https://xpra.org/svn/Xpra/
+
+RUN apk add libx11-dev libxtst-dev libxcomposite-dev libxdamage-dev libxkbfile-dev python3 python3-dev  py3-pip bash
+
+RUN apk add xauth  libvpx-dev yasm cython uglify-js libxkbfile-dev brotli gnome-backgrounds xvfb xrandr libxrandr-dev
+
+RUN apk add gdk-pixbuf gtk+3.0 gtk+3.0-dev
+
+RUN apk add cairo git make
+
+
+RUN apk add qt5-qtquickcontrols qt5-qtgraphicaleffects qt5-qtdeclarative
+
+RUN cd /root/Xpra/trunk/src && python3 setup.py --help
+
+
+# RUN cd /root/Xpra/trunk/src && python3 setup.py install --without-opengl --without-printing --without-cuda_kernels --without-cuda_rebuild --without-nvenc --without-example --without-opengl
+
+
+RUN adduser -D myuser
+USER myuser
+
+RUN cd /home/myuser && git clone https://github.com/BehaviorTree/Groot.git && cd Groot && git submodule update --init
+# RUN mkdir build && cd build && cmake .. && make -j4
+
+RUN cd /home/myuser
+
+RUN ls /home/myuser && pwd
+
+ADD /home/myuser myuser
+
+WORKDIR /home/myuser/Groot
+
+CMD python3 -m SimpleHTTPServer $PORT
+
+ # CMD xpra start --bind-tcp=0.0.0.0:10000 --speed=100 --file-transfer=yes --start=/home/myuser/Groot/build/Groot
